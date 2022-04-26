@@ -1,0 +1,186 @@
+On teach.cs, to run the python script countPages.py for part 1, assuming .ref files are in `/u/csc369h/fall/pub/a3/traces/addr-*.ref`, run: 
+> python3     countPages.py     /u/csc369h/fall/pub/a3/traces/addr-*.ref
+
+____________________________________________________________________________________________________________________________________________
+
+
+1) addr-simpleloop.ref
+
+* The number of instruction pages (I) = 120406
+* The number of data pages (S, L, M) = 61159
+* max accessed Instruction page = 0x108 which is the page location of the incrementing and comparison in for(i = 0; i < iters; i++) 
+* max accessed Data page = 0xfff000 which is the page location of i used both for loop and in ptr[i].d[0] = (double)i;
+
+below is a short snippet of running:
+> python3    countPages.py   /u/csc369h/fall/pub/a3/traces/addr-simpleloop.ref
+
+
+Counts:
+         Instructions 120406
+         Loads 50090
+         Stores 10063
+         Modifies 10006 
+
+Instructions:
+0x108 , 120026
+0x4cc3 , 118
+0x4cc0 , 161
+0x4cbf , 56
+0x4d47 , 40
+0x4cc1 , 2
+0x4cc4 , 3
+
+Data:
+0x1fff000 , 60100
+0x308 , 2
+0x5016 , 6
+0x5017 , 28
+0x4068 , 4
+
+____________________________________________________________________________________________________________________________________________
+
+
+2) addr-matmul.ref
+
+* The number of instruction pages (I) = 47473935
+* The number of data pages (S, L, M) = 23732263
+* max accessed Instruction page = 0x108 which are pages of * and + instructions in Mat_mult()
+since * and + operation is done for every cell of C,
+and then after that 0x4c6f and 0x4c70 pages which is the page of comparison instruction(for i) in Get_matrices()
+* max accessed Data page = 0xfff000 which is the page locations of matrix C since we change entries of that in
+an unoptimal way and there is no temporal locality, the num of acccesses is much less than the blocked 
+program 
+
+below is a short snippet of running:
+> python3  countPages.py   /u/csc369h/fall/pub/a3/traces/addr-matmul.ref
+
+
+Counts:
+	Instructions 47473935
+    Loads 21491388
+    Stores 1180750
+    Modifies 1060125 
+
+Instructions:
+0x108 , 46491024
+0x4c71 , 136
+0x4cc3 , 401
+0x4cc0 , 621
+0x4cbf , 168
+0x4d47 , 120
+0x4cc1 , 22
+0x4c6f , 440000
+0x4c70 , 538710
+0x4cfe , 10
+0x4c90 , 35
+0x4c87 , 190
+0x4c4d , 9
+0x4cdd , 80
+0x4c88 , 64
+0x4cb7 , 116
+0x4cb9 , 49
+0x4cba , 89
+0x4caa , 53
+0x4d3b , 10
+0x4cb8 , 4
+0x4ce7 , 67
+0x4c8d , 27
+0x4c8a , 135
+0x4c8b , 794
+0x4c80 , 20
+0x4c8c , 380
+0x4c7f , 288
+0x4c7e , 322
+0x4d5c , 10
+0x4cc4 , 9
+
+Data:
+0x1fff000 , 10301173
+0x309 , 20010
+0x5016 , 29
+0x4069 , 40030
+0x5018 , 97
+0x4dca , 1
+0x30a , 9040220
+0x5017 , 200101
+0x501c , 40009
+0x5019 , 40030
+0x422a , 24
+0x4227 , 6
+0x406a , 3238
+0x501d , 3238
+0x5156 , 6438
+0x109 , 20016
+0x406b , 3232
+0x501e , 3232
+0x406c , 3232
+0x501f , 3232
+0x406d , 3232
+0x5020 , 3232
+0x406e , 3232
+0x5021 , 3232
+0x406f , 3232
+0x5022 , 3232
+
+____________________________________________________________________________________________________________________________________________
+
+
+3) addr-blocked.ref
+
+* The number of instruction pages (I) = 51791735
+* The number of data pages (S, L, M) = 23953708
+* max accessed Instruction page = 0x109 which is the page location of comparison instruction in Mult_add()
+and Blocked_mat_mult()
+* max accessed Data page = 0xfff000 which is the page location of matrix C . This value is bigger 
+than the one of the addr-matmul.ref since we use temporal locality and use the blocks of A and B already 
+in memory for calculations and instead we refer to C blks often
+
+below is a short snippet of running:
+> python3  countPages.py   /u/csc369h/fall/pub/a3/traces/addr-blocked.ref
+
+
+Counts:
+    Instructions 51791735
+    Loads 21578982
+    Stores 1283017
+    Modifies 1091709 
+
+Instructions:
+0x108 , 5375918
+0x4c71 , 253
+0x4cc3 , 401
+0x4cc0 , 621
+0x4cbf , 168
+0x4d47 , 120
+0x4cc1 , 22
+0x4c6f , 440000
+0x4c70 , 538710
+0x4cfe , 10
+0x109 , 45292495
+0x4ce7 , 140371
+0x4c90 , 35
+0x4c87 , 190
+
+
+Data:
+0x1fff000 , 14408804
+0x309 , 20027
+0x5016 , 31
+0x4069 , 40031
+0x5018 , 98
+0x4dca , 2
+0x30a , 5083941
+0x5017 , 200101
+0x501c , 40009
+0x5019 , 40030
+0x422a , 24
+0x4227 , 6
+0x406a , 3238
+0x501d , 3238
+0x5156 , 6662
+0x109 , 20016
+0x406b , 3232
+0x501e , 3232
+0x406c , 3232
+
+
