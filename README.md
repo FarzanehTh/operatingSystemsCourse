@@ -28,7 +28,9 @@ This assignment consists of 2 parts:
 
 Our file system is called `a1fs`.
 
-<kbd><img src="/A1/fileSystem.png" style="width:450px;height:300px;" align="center"></kbd>
+<p align="center">
+    <kbd><img src="/A1/fileSystem.png" style="width:450px;height:300px;"></kbd>
+</p>
 
 **part 2**
 
@@ -82,8 +84,9 @@ In this assignment, we implemented a message queue which can be written to and r
 
 For each single queue, we have a single backend but since several different readers or writers want to interact with the queue for different purposes, we let each of them get an integer handle of that queue to subscribe to that. Each integer handle (i.e `msg_queue_t`), is specific to that reader/writer as it has the required flags embedded into it.
 
-
-<kbd><img src="/A2/message_queue.png" style="width:450px;height:300px;" align="center"></kbd>
+<p align="center">
+    <kbd><img src="/A2/message_queue.png" style="width:450px;height:300px;"></kbd>
+</p>
 
 **part 2**
 
@@ -91,7 +94,9 @@ For each single queue, we have a single backend but since several different read
 
 In this part we added an I/O multiplexing functionality on queues, by implementing a poll function that monitors for any event (i.e messages) on different messages queues.
 
-<kbd><img src="/A2/poll.png" style="width:450px;height:300px;" align="center"></kbd>
+<p align="center">
+    <kbd><img src="/A2/poll.png" style="width:450px;height:300px;"></kbd>
+</p>
 
 **Note**: Each reader/writer thread will call `msg_queue_poll()` with its own list of queues that it wants to subscribe to. So all variables in this function (i.e conditional variables, lock, ...) are specific to that reader/writer thread.
 
@@ -111,7 +116,9 @@ In this assignment, we investigated memory access patterns in different programs
 `Valgrind` has an option that allows us to print out the memory reference trace of a running program. The memory reference trace of 3 different programs (with different degrees of localities) between two parts of the code in each, was given to us. The memory traces are saved as files `pages-*.ref`.
 We traced the memory references of these 3 types of programs. Then we investigated how the accesses of different pages of the memory are distributed in terms of the number of `Instruction/Load/Store/Modify` accesses. We outputted the results similar to below:
  
-<kbd><img src="/A3/memory_trace.png" style="width:450px;height:300px;" align="center"></kbd>
+<p align="center">
+    <kbd><img src="/A3/memory_trace.png" style="width:450px;height:300px;"></kbd>
+</p>
  
 We concluded that the programs that are written such that the locality in accessing the data is paid attention to, have significantly much less *page misses* and hence are more memory efficient and faster. For example `blocked matrix multiplication` vs `naive matrix multiplication`.
  
@@ -131,26 +138,39 @@ To run the simulated memory, run:
  
 The physical memory is simulated by an `char array` which holds each physical frame and its assigned virtual address. On the other side, we have an array of frame structures that point to their assigned page table entries. Each page table entry has the frame number it has been assigned to and has also the `ref`, `valid`, `dirty`, and `swap` bits that are embedded into the frame integer. The information bits are as follows:
  
-<kbd><img src="/A3/bits.png" style="width:450px;height:200px;" align="center"></kbd>
+<p align="center">
+    <kbd><img src="/A3/bits.png" style="width:450px;height:200px;"></kbd>
+</p>
  
 The following is the overview of the data structures used in this assignment and how different types of them correspond to each other.
  
-<kbd><img src="/A3/page_table.png" style="width:450px;height:300px;" align="center"></kbd>
+<p align="center">
+    <kbd><img src="/A3/page_table.png" style="width:450px;height:300px;"></kbd>
+</p>
  
-<kbd><img src="/A3/page_table_2_levels.png" style="width:450px;height:300px;" align="center"></kbd>
- 
-<kbd><img src="/A3/simulated_memory.png" style="width:450px;height:300px;" align="center"></kbd>
- 
-<kbd><img src="/A3/frame_array.png" style="width:450px;height:300px;" align="center"></kbd>
- 
-<kbd><img src="/A3/page_dir_array.png" style="width:450px;height:300px;" align="center"></kbd>
- 
+<p align="center">
+    <kbd><img src="/A3/page_table_2_levels.png" style="width:450px;height:300px;"></kbd>
+</p>
+
+<p align="center">
+    <kbd><img src="/A3/simulated_memory.png" style="width:450px;height:300px;" align="center"></kbd>
+</p>
+
+<p align="center">
+    <kbd><img src="/A3/frame_array.png" style="width:450px;height:300px;" align="center"></kbd>
+</p>
+
+<p align="center">
+    <kbd><img src="/A3/page_dir_array.png" style="width:450px;height:300px;" align="center"></kbd>
+</p>
+
 In general, this assignment simulated the whole procedure that happens when accessing a line of the code like `store/modify/load` form a virtual address. From accessing the page table and assigning a memory frame, to setting `ref` bits and updating the data structures used in the page replacement algorithm.
  
 Finally, we implemented and investigated the performance of `FIFO`, `Clock`, `LRU` page replacement algorithms. For instance, we implemented the `LRU` using a doubly linked list as below:
- 
-<kbd><img src="/A3/LRU.png" style="width:450px;height:300px;" align="center"></kbd>
 
+<p align="center">
+    <kbd><img src="/A3/LRU.png" style="width:450px;height:300px;" align="center"></kbd>
+</p>
 
 You can view the detailed completion requirements of this assignment [*here*](/A3/assignment3_virtualMemory.pdf) and our analysis of page replacement algorithms [*here*](/A3/analysis.pdf).
 
